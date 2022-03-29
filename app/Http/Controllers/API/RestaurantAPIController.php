@@ -138,9 +138,9 @@ class RestaurantAPIController extends Controller
 
 
             if (!empty($this->cuisineRepository)) {
-                $cuisine = $this->cuisineRepository->findWithoutFail($item, ['id'])->toArray();
+                $cuisine = $this->cuisineRepository->findWithoutFail($item)->toArray();
                 // $mainCategories =  array_push($mainCategories, $cuisine);
-                $mainCategories =  array_merge($mainCategories, $cuisine);
+                $mainCategories[] =   $cuisine;
             }
         }
         
