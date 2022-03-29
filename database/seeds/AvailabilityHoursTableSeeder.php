@@ -18,9 +18,9 @@ class AvailabilityHoursTableSeeder extends Seeder
      */
     public function run()
     {
-        \DB::table('availability_hours')->delete();
+        // \DB::table('availability_hours')->delete();
 
 
-        factory(AvailabilityHour::class, 50)->create();
+        // factory(AvailabilityHour::class, 50)->create();
     }
 }
