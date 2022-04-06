@@ -15,8 +15,10 @@ use App\Criteria\Foods\FoodsOfCategoriesCriteria;
 use App\Criteria\Foods\FoodsOfCuisinesCriteria;
 use App\Criteria\Foods\TrendingWeekCriteria;
 use App\Http\Controllers\Controller;
+use App\Models\Extra;
 use App\Models\Food;
 use App\Repositories\CustomFieldRepository;
+use App\Repositories\ExtraRepository;
 use App\Repositories\FoodRepository;
 use App\Repositories\UploadRepository;
 use Flash;
@@ -43,13 +45,19 @@ class FoodAPIController extends Controller
      */
     private $uploadRepository;
 
+    /**
+     * @var ExtraRepository
+     */
+    private $extraRepository;
 
-    public function __construct(FoodRepository $foodRepo, CustomFieldRepository $customFieldRepo, UploadRepository $uploadRepo)
+
+    public function __construct(FoodRepository $foodRepo, CustomFieldRepository $customFieldRepo, UploadRepository $uploadRepo, ExtraRepository $extraRepo)
     {
         parent::__construct();
         $this->foodRepository = $foodRepo;
         $this->customFieldRepository = $customFieldRepo;
         $this->uploadRepository = $uploadRepo;
+        $this->extraRepository = $extraRepo;
     }
 
     /**
@@ -125,6 +133,10 @@ class FoodAPIController extends Controller
         if (empty($food)) {
             return $this->sendError('Food not found show');
         }
+
+        $extras = Extra::where('food_id', ($id))->with('extraGroup')->get();
+        $food->extras_data = $extras;
+        // dd($food->toArray());
 
         return $this->sendResponse($food->toArray(), 'Food retrieved successfully');
     }

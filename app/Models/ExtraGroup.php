@@ -70,5 +70,12 @@ class ExtraGroup extends Model
     }
 
     
-    
+      /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     **/
+    public function extras()
+    {
+        return $this->hasMany(\App\Models\Extra::class, 'extra_group_id');
+    }
+
 }
