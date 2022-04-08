@@ -136,7 +136,6 @@ class FoodAPIController extends Controller
 
         $extras = Extra::where('food_id', ($id))->with('extraGroup')->get();
         $food->extras_data = $extras;
-        // dd($food->toArray());
 
         return $this->sendResponse($food->toArray(), 'Food retrieved successfully');
     }
@@ -162,6 +161,14 @@ class FoodAPIController extends Controller
             }
         } catch (ValidatorException $e) {
             return $this->sendError($e->getMessage());
+        }
+
+        $extras = $input['extrasData'];
+        if (!empty($extras)) {
+            foreach ($extras as $extra ) {
+                $extra['food_id'] = $food->id;
+                $this->extraRepository->create($extra);
+            }
         }
 
         return $this->sendResponse($food->toArray(), __('lang.saved_successfully', ['operator' => __('lang.food')]));

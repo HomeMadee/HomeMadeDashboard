@@ -101,6 +101,7 @@ Route::middleware('auth:api')->group(function () {
             Route::resource('restaurants', 'API\Manager\RestaurantAPIController');
             Route::resource('faq_categories', 'API\FaqCategoryAPIController');
             Route::resource('faqs', 'API\FaqAPIController');
+            Route::resource('foods', 'API\FoodAPIController');
         });
     });
     Route::post('users/{id}', 'API\UserAPIController@update');
