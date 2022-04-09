@@ -135,7 +135,7 @@ class FoodAPIController extends Controller
         }
 
         $extras = Extra::where('food_id', ($id))->with('extraGroup')->get();
-        $food->extras_data = $extras;
+        $food->food_extras = $extras;
 
         return $this->sendResponse($food->toArray(), 'Food retrieved successfully');
     }
