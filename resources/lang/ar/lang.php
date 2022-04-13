@@ -1154,5 +1154,31 @@ return [
     'availability_hour_e_provider_id' => 'مزود',
     'availability_hour_e_provider_id_help' => 'حدد مزود',
     'availability_hour_e_provider_id_placeholder' => 'حدد مزود',
+    
+    // Working days
+    'food_working_days' => 'Working Days',
+    'food_working_days_help' => 'Insert Working Days',
+    // Working hours
+    'food_working_hours' => 'Working hours',
+    'food_working_hours_help' => 'Insert Working Hours',
+    'food_working_hours_placeholder' => 'Insert Working Hours',
+    // Food Prepare Time
+    'food_prepare_time' => 'Food Prepare Time',
+    'food_prepare_time_help' => 'Insert Food Prepare Time',
+    'food_prepare_time_placeholder' => 'Insert Food Prepare Time',
+    // Max Orders
+    'food_max_orders' => 'Food Max Orders',
+    'food_max_orders_help' => 'Insert Food Max Orders',
+    'food_max_orders_placeholder' => 'Insert Food Max Orders',
+    // Min Orders
+    'food_min_orders' => 'Food Min Orders',
+    'food_min_orders_help' => 'Insert Food Min Orders',
+    'food_min_orders_placeholder' => 'Insert Food Min Orders',
+    // daily Orders
+    'food_daily_orders' => 'Food Daily Orders',
+    'food_daily_orders_help' => 'Insert Food Daily Orders',
+    'food_daily_orders_placeholder' => 'Insert Food Daily Orders',
+    // daily Orders
+    'food_producible' => 'Producible Food',
   
 ];
