@@ -66,8 +66,13 @@ class CustomFieldController extends Controller
     public function store(CreateCustomFieldRequest $request)
     {
         $input = $request->all();
+        $fields = setting('custom_field_models', []);
         try {
             $customField = $this->customFieldRepository->create($input);
+            array_push($fields, $input['custom_field_model']);
+            setting()->set('custom_field_models', $fields);
+            setting(['custom_field_models', $fields])->save();
+            // dd(setting('custom_field_models', []));
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());
         }

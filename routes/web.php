@@ -148,9 +148,10 @@ Route::middleware('auth')->group(function () {
         'create', 'store', 'update', 'edit',
     ]);;
 
-    Route::resource('carts', 'CartController')->except([
-        'show', 'store', 'create'
-    ]);
+    // Route::resource('carts', 'CartController')->except([
+    //     'show', 'store', 'create'
+    // ]);
+    Route::resource('carts', 'CartController');
     Route::resource('deliveryAddresses', 'DeliveryAddressController')->except([
         'show'
     ]);

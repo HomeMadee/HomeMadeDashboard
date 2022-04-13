@@ -94,6 +94,7 @@ class UserController extends Controller
 
         $rolesSelected = [];
         $hasCustomField = in_array($this->userRepository->model(), setting('custom_field_models', []));
+        dd(setting('custom_field_models', []));
         if ($hasCustomField) {
             $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->userRepository->model());
             $html = generateCustomField($customFields);

@@ -173,6 +173,8 @@ class CartController extends Controller
             return redirect(route('carts.index'));
         }
         $input = $request->all();
+
+        // dd($input);
         $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->cartRepository->model());
         try {
             $cart = $this->cartRepository->update($input, $id);

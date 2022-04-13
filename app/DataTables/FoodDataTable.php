@@ -1,4 +1,5 @@
 <?php
+
 /**
  * File name: FoodDataTable.php
  * Last modified: 2020.05.04 at 09:04:18
@@ -12,6 +13,7 @@ namespace App\DataTables;
 use App\Models\CustomField;
 use App\Models\Food;
 use Barryvdh\DomPDF\Facade as PDF;
+use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
 
@@ -41,10 +43,10 @@ class FoodDataTable extends DataTable
                 return getPriceColumn($food);
             })
             ->editColumn('discount_price', function ($food) {
-                return getPriceColumn($food,'discount_price');
+                return getPriceColumn($food, 'discount_price');
             })
             ->editColumn('weight', function ($food) {
-                return $food['weight'].' '.$food['unit'];
+                return $food['weight'] . ' ' . $food['unit'];
             })
             ->editColumn('updated_at', function ($food) {
                 return getDateColumn($food, 'updated_at');
@@ -68,7 +70,7 @@ class FoodDataTable extends DataTable
     {
 
         if (auth()->user()->hasRole('admin')) {
-            return $model->newQuery()->with("restaurant")->with("category")->select('foods.*')->orderBy('foods.updated_at','desc');
+            return $model->newQuery()->with("restaurant")->with("category")->select('foods.*')->orderBy('foods.updated_at', 'desc');
         } else if (auth()->user()->hasRole('manager')) {
             return $model->newQuery()->with("restaurant")->with("category")
                 ->join("user_restaurants", "user_restaurants.restaurant_id", "=", "foods.restaurant_id")
@@ -101,12 +103,16 @@ class FoodDataTable extends DataTable
         return $this->builder()
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->addAction(['title'=>trans('lang.actions'),'width' => '80px', 'printable' => false, 'responsivePriority' => '100'])
+            ->addAction(['title' => trans('lang.actions'), 'width' => '80px', 'printable' => false, 'responsivePriority' => '100'])
             ->parameters(array_merge(
-                config('datatables-buttons.parameters'), [
+                config('datatables-buttons.parameters'),
+                [
                     'language' => json_decode(
-                        file_get_contents(base_path('resources/lang/' . app()->getLocale() . '/datatable.json')
-                        ), true)
+                        file_get_contents(
+                            base_path('resources/lang/' . app()->getLocale() . '/datatable.json')
+                        ),
+                        true
+                    )
                 ]
             ));
     }
