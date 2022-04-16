@@ -1,4 +1,5 @@
 <?php
+
 /**
  * File name: UpdateOrderEarningTable.php
  * Last modified: 2020.05.05 at 17:03:49
@@ -42,7 +43,7 @@ class UpdateOrderEarningTable
         if ($event->oldStatus != $event->updatedOrder->payment->status) {
             $this->earningRepository->pushCriteria(new EarningOfRestaurantCriteria($event->updatedOrder->foodOrders[0]->food->restaurant->id));
             $restaurant = $this->earningRepository->first();
-//            dd($restaurant);
+            //            dd($restaurant);
             $amount = 0;
 
             // test if order delivered to client
@@ -68,7 +69,6 @@ class UpdateOrderEarningTable
                     $restaurant->save();
                 }
             }
-
         }
     }
 }

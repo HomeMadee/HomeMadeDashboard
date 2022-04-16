@@ -38,7 +38,7 @@ class FavoriteAPIController extends Controller
      */
     public function index(Request $request)
     {
-        try{
+        try {
             $this->favoriteRepository->pushCriteria(new RequestCriteria($request));
             $this->favoriteRepository->pushCriteria(new LimitOffsetCriteria($request));
         } catch (RepositoryException $e) {
@@ -83,13 +83,13 @@ class FavoriteAPIController extends Controller
     {
         $input = $request->all();
         try {
-//            $favorite = $this->favoriteRepository->updateOrCreate($request->only('user_id','food_id','extras'),$input);
+            //            $favorite = $this->favoriteRepository->updateOrCreate($request->only('user_id','food_id','extras'),$input);
             $favorite = $this->favoriteRepository->create($input);
         } catch (ValidatorException $e) {
             return $this->sendError('Favorite not found');
         }
 
-        return $this->sendResponse($favorite->toArray(), __('lang.saved_successfully',['operator' => __('lang.favorite')]));
+        return $this->sendResponse($favorite->toArray(), __('lang.saved_successfully', ['operator' => __('lang.favorite')]));
     }
 
     /**
@@ -101,15 +101,15 @@ class FavoriteAPIController extends Controller
      */
     public function exist(Request $request)
     {
-        $input = $request->only('food_id','user_id');
-//        dd($input);
+        $input = $request->only('food_id', 'user_id');
+        //        dd($input);
         try {
             $favorites = $this->favoriteRepository->findWhere($input);
         } catch (ValidatorException $e) {
             return $this->sendError('Favorite not found');
         }
 
-        return $this->sendResponse($favorites->first(), __('lang.saved_successfully',['operator' => __('lang.favorite')]));
+        return $this->sendResponse($favorites->first(), __('lang.saved_successfully', ['operator' => __('lang.favorite')]));
     }
 
     /**
@@ -141,8 +141,7 @@ class FavoriteAPIController extends Controller
             return $this->sendError($e->getMessage());
         }
 
-        return $this->sendResponse($favorite->toArray(),__('lang.updated_successfully', ['operator' => __('lang.favorite')]));
-
+        return $this->sendResponse($favorite->toArray(), __('lang.updated_successfully', ['operator' => __('lang.favorite')]));
     }
 
     /**
@@ -158,12 +157,10 @@ class FavoriteAPIController extends Controller
 
         if (empty($favorite)) {
             return $this->sendError('Favorite not found');
-
         }
 
         $this->favoriteRepository->delete($id);
 
-        return $this->sendResponse($favorite, __('lang.deleted_successfully',['operator' => __('lang.favorite')]));
-
+        return $this->sendResponse($favorite, __('lang.deleted_successfully', ['operator' => __('lang.favorite')]));
     }
 }

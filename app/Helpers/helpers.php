@@ -14,6 +14,10 @@ use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Illuminate\Support\Str;
 use InfyOm\Generator\Utils\GeneratorFieldsInputUtil;
 
+function getRemaining($input)
+{
+}
+
 /**
  * @param $bytes
  * @param int $precision

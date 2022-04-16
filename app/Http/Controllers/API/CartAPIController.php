@@ -9,6 +9,7 @@ use App\Models\Cart;
 use App\Repositories\CartRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Repositories\FoodRepository;
 use Illuminate\Support\Facades\Log;
 use InfyOm\Generator\Criteria\LimitOffsetCriteria;
 use Prettus\Repository\Criteria\RequestCriteria;
@@ -27,9 +28,13 @@ class CartAPIController extends Controller
     /** @var  CartRepository */
     private $cartRepository;
 
-    public function __construct(CartRepository $cartRepo)
+    /** @var  FoodRepository */
+    private $foodRepository;
+
+    public function __construct(CartRepository $cartRepo, FoodRepository $foodRepo)
     {
         $this->cartRepository = $cartRepo;
+        $this->foodRepository = $foodRepo;
     }
 
     /**
@@ -41,7 +46,7 @@ class CartAPIController extends Controller
      */
     public function index(Request $request)
     {
-        try{
+        try {
             $this->cartRepository->pushCriteria(new RequestCriteria($request));
             $this->cartRepository->pushCriteria(new LimitOffsetCriteria($request));
         } catch (RepositoryException $e) {
@@ -61,7 +66,7 @@ class CartAPIController extends Controller
      */
     public function count(Request $request)
     {
-        try{
+        try {
             $this->cartRepository->pushCriteria(new RequestCriteria($request));
             $this->cartRepository->pushCriteria(new LimitOffsetCriteria($request));
         } catch (RepositoryException $e) {
@@ -104,16 +109,16 @@ class CartAPIController extends Controller
     {
         $input = $request->all();
         try {
-            if(isset($input['reset']) && $input['reset'] == '1'){
+            if (isset($input['reset']) && $input['reset'] == '1') {
                 // delete all items in the cart of current user
-                $this->cartRepository->deleteWhere(['user_id'=> $input['user_id']]);
+                $this->cartRepository->deleteWhere(['user_id' => $input['user_id']]);
             }
             $cart = $this->cartRepository->create($input);
         } catch (ValidatorException $e) {
             return $this->sendError($e->getMessage());
         }
 
-        return $this->sendResponse($cart->toArray(), __('lang.saved_successfully',['operator' => __('lang.cart')]));
+        return $this->sendResponse($cart->toArray(), __('lang.saved_successfully', ['operator' => __('lang.cart')]));
     }
 
     /**
@@ -134,14 +139,13 @@ class CartAPIController extends Controller
         $input = $request->all();
 
         try {
-//            $input['extras'] = isset($input['extras']) ? $input['extras'] : [];
+            //            $input['extras'] = isset($input['extras']) ? $input['extras'] : [];
             $cart = $this->cartRepository->update($input, $id);
-
         } catch (ValidatorException $e) {
             return $this->sendError($e->getMessage());
         }
 
-        return $this->sendResponse($cart->toArray(), __('lang.saved_successfully',['operator' => __('lang.cart')]));
+        return $this->sendResponse($cart->toArray(), __('lang.saved_successfully', ['operator' => __('lang.cart')]));
     }
 
     /**
@@ -157,13 +161,10 @@ class CartAPIController extends Controller
 
         if (empty($cart)) {
             return $this->sendError('Cart not found');
-
         }
 
         $cart = $this->cartRepository->delete($id);
 
-        return $this->sendResponse($cart, __('lang.deleted_successfully',['operator' => __('lang.cart')]));
-
+        return $this->sendResponse($cart, __('lang.deleted_successfully', ['operator' => __('lang.cart')]));
     }
-
 }

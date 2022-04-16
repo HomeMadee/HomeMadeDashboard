@@ -1,4 +1,5 @@
 <?php
+
 /**
  * File name: FoodAPIController.php
  * Last modified: 2020.05.04 at 09:04:19
@@ -69,7 +70,7 @@ class FoodAPIController extends Controller
      */
     public function index(Request $request)
     {
-        try{
+        try {
             $this->foodRepository->pushCriteria(new RequestCriteria($request));
             $this->foodRepository->pushCriteria(new LimitOffsetCriteria($request));
             $this->foodRepository->pushCriteria(new FoodsOfCuisinesCriteria($request));
@@ -79,10 +80,9 @@ class FoodAPIController extends Controller
                 $this->foodRepository->pushCriteria(new NearCriteria($request));
             }
 
-//            $this->foodRepository->orderBy('closed');
-//            $this->foodRepository->orderBy('area');
+            //            $this->foodRepository->orderBy('closed');
+            //            $this->foodRepository->orderBy('area');
             $foods = $this->foodRepository->all();
-
         } catch (RepositoryException $e) {
             return $this->sendError($e->getMessage());
         }
@@ -99,14 +99,13 @@ class FoodAPIController extends Controller
      */
     public function categories(Request $request)
     {
-        try{
+        try {
             $this->foodRepository->pushCriteria(new RequestCriteria($request));
             $this->foodRepository->pushCriteria(new LimitOffsetCriteria($request));
             $this->foodRepository->pushCriteria(new FoodsOfCuisinesCriteria($request));
             $this->foodRepository->pushCriteria(new FoodsOfCategoriesCriteria($request));
 
             $foods = $this->foodRepository->all();
-
         } catch (RepositoryException $e) {
             return $this->sendError($e->getMessage());
         }
@@ -126,7 +125,7 @@ class FoodAPIController extends Controller
     {
         /** @var Food $food */
         if (!empty($this->foodRepository)) {
-           
+
             $food = $this->foodRepository->findWithoutFail($id);
         }
 
@@ -152,6 +151,13 @@ class FoodAPIController extends Controller
         $input = $request->all();
         $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->foodRepository->model());
         try {
+            if ($input['producible'] === '0') {
+                $input['remaining'] = $input['daily_orders'];
+            } else {
+                $hrsPerDay = $input['working_hours'] / count($input['working_days']);
+                $dailyProducts = $hrsPerDay / $input['prepare_time'];
+                $input['remaining'] = $dailyProducts;
+            }
             $food = $this->foodRepository->create($input);
             $food->customFieldsValues()->createMany(getCustomFieldsValues($customFields, $request));
             if (isset($input['image']) && $input['image']) {
@@ -165,7 +171,7 @@ class FoodAPIController extends Controller
 
         $extras = $input['extrasData'];
         if (!empty($extras)) {
-            foreach ($extras as $extra ) {
+            foreach ($extras as $extra) {
                 $extra['food_id'] = $food->id;
                 $this->extraRepository->create($extra);
             }
@@ -208,7 +214,6 @@ class FoodAPIController extends Controller
         }
 
         return $this->sendResponse($food->toArray(), __('lang.updated_successfully', ['operator' => __('lang.food')]));
-
     }
 
     /**
@@ -229,7 +234,5 @@ class FoodAPIController extends Controller
         $food = $this->foodRepository->delete($id);
 
         return $this->sendResponse($food, __('lang.deleted_successfully', ['operator' => __('lang.food')]));
-
     }
-
 }

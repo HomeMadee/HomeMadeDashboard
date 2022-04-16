@@ -143,7 +143,7 @@ class RestaurantAPIController extends Controller
                 $mainCategories[] =   $cuisine;
             }
         }
-        
+
         // dd($mainCategories);
 
         $restaurant->categories = $categories;

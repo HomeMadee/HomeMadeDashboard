@@ -1,4 +1,5 @@
 <?php
+
 /**
  * File name: OrderAPIController.php
  * Last modified: 2020.06.11 at 16:10:52
@@ -19,6 +20,7 @@ use App\Notifications\NewOrder;
 use App\Notifications\StatusChangedOrder;
 use App\Repositories\CartRepository;
 use App\Repositories\FoodOrderRepository;
+use App\Repositories\FoodRepository;
 use App\Repositories\NotificationRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\PaymentRepository;
@@ -40,6 +42,8 @@ class OrderAPIController extends Controller
 {
     /** @var  OrderRepository */
     private $orderRepository;
+    /** @var  FoodReRepository */
+    private $foodRepository;
     /** @var  FoodOrderRepository */
     private $foodOrderRepository;
     /** @var  CartRepository */
@@ -60,14 +64,22 @@ class OrderAPIController extends Controller
      * @param NotificationRepository $notificationRepo
      * @param UserRepository $userRepository
      */
-    public function __construct(OrderRepository $orderRepo, FoodOrderRepository $foodOrderRepository, CartRepository $cartRepo, PaymentRepository $paymentRepo, NotificationRepository $notificationRepo, UserRepository $userRepository)
-    {
+    public function __construct(
+        OrderRepository $orderRepo,
+        FoodOrderRepository $foodOrderRepository,
+        CartRepository $cartRepo,
+        PaymentRepository $paymentRepo,
+        NotificationRepository $notificationRepo,
+        UserRepository $userRepository,
+        FoodRepository $foodRepo
+    ) {
         $this->orderRepository = $orderRepo;
         $this->foodOrderRepository = $foodOrderRepository;
         $this->cartRepository = $cartRepo;
         $this->userRepository = $userRepository;
         $this->paymentRepository = $paymentRepo;
         $this->notificationRepository = $notificationRepo;
+        $this->foodRepository = $foodRepo;
     }
 
     /**
@@ -118,8 +130,6 @@ class OrderAPIController extends Controller
         }
 
         return $this->sendResponse($order->toArray(), 'Order retrieved successfully');
-
-
     }
 
     /**
@@ -137,7 +147,6 @@ class OrderAPIController extends Controller
                 return $this->stripPayment($request);
             } else {
                 return $this->cashPayment($request);
-
             }
         }
     }
@@ -211,6 +220,13 @@ class OrderAPIController extends Controller
         $input = $request->all();
         $amount = 0;
         try {
+            // // $food = 
+            // foreach ($input['foods'] as $foodOrder) {
+            //     $food = $this->foodRepository->findWithoutFail($foodOrder['food_id']);
+            //     $food->remaining = $food->remaining - $foodOrder['quantity'];
+            //     $this->foodRepository->update(['remaining' => $food->remaining], $food->id);
+            // }
+
             $order = $this->orderRepository->create(
                 $request->only('user_id', 'order_status_id', 'tax', 'delivery_address_id', 'delivery_fee', 'hint')
             );
@@ -218,6 +234,10 @@ class OrderAPIController extends Controller
                 $foodOrder['order_id'] = $order->id;
                 $amount += $foodOrder['price'] * $foodOrder['quantity'];
                 $this->foodOrderRepository->create($foodOrder);
+
+                $food = $this->foodRepository->findWithoutFail($foodOrder['food_id']);
+                $food->remaining = $food->remaining - $foodOrder['quantity'];
+                $this->foodRepository->update(['remaining' => $food->remaining], $food->id);
             }
             $amount += $order->delivery_fee;
             $amountWithTax = $amount + ($amount * $order->tax / 100);
@@ -234,7 +254,6 @@ class OrderAPIController extends Controller
             $this->cartRepository->deleteWhere(['user_id' => $order->user_id]);
 
             Notification::send($order->foodOrders[0]->food->restaurant->users, new NewOrder($order));
-
         } catch (ValidatorException $e) {
             return $this->sendError($e->getMessage());
         }
@@ -278,12 +297,10 @@ class OrderAPIController extends Controller
                     }
                 }
             }
-
         } catch (ValidatorException $e) {
             return $this->sendError($e->getMessage());
         }
 
         return $this->sendResponse($order->toArray(), __('lang.saved_successfully', ['operator' => __('lang.order')]));
     }
-
 }

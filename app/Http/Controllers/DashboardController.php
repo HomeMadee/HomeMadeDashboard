@@ -46,8 +46,8 @@ class DashboardController extends Controller
         $restaurantsCount = $this->restaurantRepository->count();
         $restaurants = $this->restaurantRepository->take(4)->get();
         $earning = $this->paymentRepository->all()->sum('price');
-        $ajaxEarningUrl = route('payments.byMonth',['api_token'=>auth()->user()->api_token]);
-//        dd($ajaxEarningUrl);
+        $ajaxEarningUrl = route('payments.byMonth', ['api_token' => auth()->user()->api_token]);
+        //        dd($ajaxEarningUrl);
         return view('dashboard.index')
             ->with("ajaxEarningUrl", $ajaxEarningUrl)
             ->with("ordersCount", $ordersCount)

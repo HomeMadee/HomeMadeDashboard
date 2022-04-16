@@ -1,4 +1,5 @@
 <?php
+
 /**
  * File name: FoodController.php
  * Last modified: 2020.04.30 at 08:21:08
@@ -47,10 +48,13 @@ class FoodController extends Controller
      */
     private $categoryRepository;
 
-    public function __construct(FoodRepository $foodRepo, CustomFieldRepository $customFieldRepo, UploadRepository $uploadRepo
-        , RestaurantRepository $restaurantRepo
-        , CategoryRepository $categoryRepo)
-    {
+    public function __construct(
+        FoodRepository $foodRepo,
+        CustomFieldRepository $customFieldRepo,
+        UploadRepository $uploadRepo,
+        RestaurantRepository $restaurantRepo,
+        CategoryRepository $categoryRepo
+    ) {
         parent::__construct();
         $this->foodRepository = $foodRepo;
         $this->customFieldRepository = $customFieldRepo;
@@ -104,6 +108,14 @@ class FoodController extends Controller
         $input = $request->all();
         $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->foodRepository->model());
         try {
+            // dd($customFields->toArray());
+            if ($input['producible'] === '0') {
+                $input['remaining'] = $input['daily_orders'];
+            } else {
+                $hrsPerDay = $input['working_hours'] / count($input['working_days']);
+                $dailyProducts = $hrsPerDay / $input['prepare_time'];
+                $input['remaining'] = $dailyProducts;
+            }
             $food = $this->foodRepository->create($input);
             $food->customFieldsValues()->createMany(getCustomFieldsValues($customFields, $request));
             if (isset($input['image']) && $input['image']) {
@@ -237,7 +249,6 @@ class FoodController extends Controller
             $this->foodRepository->delete($id);
 
             Flash::success(__('lang.deleted_successfully', ['operator' => __('lang.food')]));
-
         } else {
             Flash::warning('This is only demo app you can\'t change this section ');
         }
