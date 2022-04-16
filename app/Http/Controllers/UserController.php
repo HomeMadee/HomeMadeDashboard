@@ -1,4 +1,5 @@
 <?php
+
 /**
  * File name: UserController.php
  * Last modified: 2020.06.11 at 16:10:52
@@ -39,9 +40,12 @@ class UserController extends Controller
      */
     private $customFieldRepository;
 
-    public function __construct(UserRepository $userRepo, RoleRepository $roleRepo, UploadRepository $uploadRepo,
-                                CustomFieldRepository $customFieldRepo)
-    {
+    public function __construct(
+        UserRepository $userRepo,
+        RoleRepository $roleRepo,
+        UploadRepository $uploadRepo,
+        CustomFieldRepository $customFieldRepo
+    ) {
         parent::__construct();
         $this->userRepository = $userRepo;
         $this->roleRepository = $roleRepo;
@@ -249,7 +253,7 @@ class UserController extends Controller
         if (!auth()->user()->can('permissions.index')) {
             unset($input['roles']);
         } else {
-        $input['roles'] = isset($input['roles']) ? $input['roles'] : [];
+            $input['roles'] = isset($input['roles']) ? $input['roles'] : [];
         }
         if (empty($input['password'])) {
             unset($input['password']);
@@ -268,7 +272,7 @@ class UserController extends Controller
                 $mediaItem->copy($user, 'avatar');
             }
             if (auth()->user()->can('permissions.index')) {
-            $user->syncRoles($input['roles']);
+                $user->syncRoles($input['roles']);
             }
             foreach (getCustomFieldsValues($customFields, $request) as $value) {
                 $user->customFieldsValues()
@@ -283,7 +287,6 @@ class UserController extends Controller
         Flash::success('User updated successfully.');
 
         return redirect()->back();
-
     }
 
     /**

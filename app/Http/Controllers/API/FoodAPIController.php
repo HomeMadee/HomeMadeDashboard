@@ -24,6 +24,7 @@ use App\Repositories\FoodRepository;
 use App\Repositories\UploadRepository;
 use Flash;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use InfyOm\Generator\Criteria\LimitOffsetCriteria;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Prettus\Repository\Exceptions\RepositoryException;

@@ -26,5 +26,4 @@ class RestaurantChangedEvent
         $this->newRestaurant = $newRestaurant;
         $this->oldRestaurant = $oldRestaurant;
     }
-
 }

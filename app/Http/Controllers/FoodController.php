@@ -14,6 +14,7 @@ use App\Criteria\Foods\FoodsOfUserCriteria;
 use App\DataTables\FoodDataTable;
 use App\Http\Requests\CreateFoodRequest;
 use App\Http\Requests\UpdateFoodRequest;
+use App\Models\Food;
 use App\Repositories\CategoryRepository;
 use App\Repositories\CustomFieldRepository;
 use App\Repositories\RestaurantRepository;
@@ -269,6 +270,36 @@ class FoodController extends Controller
             }
         } catch (\Exception $e) {
             Log::error($e->getMessage());
+        }
+    }
+
+
+    public static function resetRemaining()
+    {
+        $foods = Food::all();
+        foreach ($foods as $food) {
+            $remaining = 0;
+            if (isset($food->custom_fields)) {
+                try {
+                    if ($food->custom_fields['producible']['value'] === '0') {
+                        $remaining = $food->custom_fields['daily_orders']['value'];
+                    } else {
+                        $days_str = $food->custom_fields['working_days']['value'];
+                        $days_arr = explode(',', substr($days_str, 1, strlen($days_str) - 2));
+                        $workingHrs =  intval($food->custom_fields['working_hours']['value']);
+                        $prepare_time = intval($food->custom_fields['prepare_time']['value']);
+                        $hrsPerDay = $workingHrs / count($days_arr);
+                        $dailyProducts = $hrsPerDay / $prepare_time;
+                        $remaining = $dailyProducts;
+                        // $hrsPerDay = $input['working_hours'] / count($input['working_days']);
+                        // $input['remaining'] = $dailyProducts;
+                    }
+                    $food->remaining = $remaining;
+                    $food->save();
+                } catch (\Throwable $th) {
+                    Log::error('Food id: ' . $food->id . ' >> ' . $th);
+                }
+            }
         }
     }
 }

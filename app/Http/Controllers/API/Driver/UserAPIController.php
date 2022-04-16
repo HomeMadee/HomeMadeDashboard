@@ -1,4 +1,5 @@
 <?php
+
 /**
  * File name: UserAPIController.php
  * Last modified: 2020.05.21 at 17:25:21
@@ -60,7 +61,6 @@ class UserAPIController extends Controller
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), 401);
         }
-
     }
 
     /**
@@ -108,7 +108,6 @@ class UserAPIController extends Controller
             $this->sendError($e->getMessage(), 401);
         }
         return $this->sendResponse($user['name'], 'User logout successfully');
-
     }
 
     function user(Request $request)
@@ -125,7 +124,8 @@ class UserAPIController extends Controller
     function settings(Request $request)
     {
         $settings = setting()->all();
-        $settings = array_intersect_key($settings,
+        $settings = array_intersect_key(
+            $settings,
             [
                 'default_tax' => '',
                 'default_currency' => '',
@@ -212,6 +212,5 @@ class UserAPIController extends Controller
                 'code' => 401,
             ], 'Reset link not sent');
         }
-
     }
 }

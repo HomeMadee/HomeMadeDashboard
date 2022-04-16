@@ -21,5 +21,4 @@ class UserRoleChangedEvent
     {
         $this->user = $user;
     }
-
 }
