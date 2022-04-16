@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('inspire')
             ->everyMinute();
         $schedule->command('resetRemaining')
-            ->everyMinute();
+            ->daily()->runInBackground();
         /*  $schedule->call(function () {
             $foods = Food::all();
             foreach ($foods as $food) {
