@@ -155,8 +155,8 @@ class FoodAPIController extends Controller
             if ($input['producible'] === '0') {
                 $input['remaining'] = $input['daily_orders'];
             } else {
-                $hrsPerDay = $input['working_hours'] / count($input['working_days']);
-                $dailyProducts = $hrsPerDay / $input['prepare_time'];
+                // $hrsPerDay = $input['working_hours'] / count($input['working_days']);
+                $dailyProducts =  $input['working_hours'] / $input['prepare_time'];
                 $input['remaining'] = $dailyProducts;
             }
             $food = $this->foodRepository->create($input);
@@ -246,6 +246,7 @@ class FoodAPIController extends Controller
                 return $this->sendError('Food not found to destroy');
             }
             $active = $input['active'];
+
             $food = $this->foodRepository->update(['active' => $active], $id);
             return $this->sendResponse($food, __('lang.deleted_successfully', ['operator' => __('lang.food')]));
         } catch (\Throwable $th) {
