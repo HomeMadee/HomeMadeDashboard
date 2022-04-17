@@ -113,8 +113,7 @@ class FoodController extends Controller
             if ($input['producible'] === '0') {
                 $input['remaining'] = $input['daily_orders'];
             } else {
-                $hrsPerDay = $input['working_hours'] / count($input['working_days']);
-                $dailyProducts = $hrsPerDay / $input['prepare_time'];
+                $dailyProducts = $input['working_hours'] / $input['prepare_time'];
                 $input['remaining'] = $dailyProducts;
             }
             $food = $this->foodRepository->create($input);
