@@ -68,6 +68,7 @@ class Food extends Model implements HasMedia
         'package_items_count',
         'unit',
         'remaining',
+        'active',
         'featured',
         'deliverable',
         'restaurant_id',

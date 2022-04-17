@@ -236,4 +236,19 @@ class FoodAPIController extends Controller
 
         return $this->sendResponse($food, __('lang.deleted_successfully', ['operator' => __('lang.food')]));
     }
+
+    public function activate($id, Request $request)
+    {
+        $input = $request->all();
+        try {
+            $food = $this->foodRepository->findWithoutFail($id);
+            if (empty($food)) {
+                return $this->sendError('Food not found to destroy');
+            }
+            $active = $input['active'];
+            $food = $this->foodRepository->update(['active' => $active], $id);
+            return $this->sendResponse($food, __('lang.deleted_successfully', ['operator' => __('lang.food')]));
+        } catch (\Throwable $th) {
+        }
+    }
 }

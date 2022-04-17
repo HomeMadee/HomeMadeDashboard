@@ -103,6 +103,7 @@ Route::middleware('auth:api')->group(function () {
             Route::resource('faq_categories', 'API\FaqCategoryAPIController');
             Route::resource('faqs', 'API\FaqAPIController');
             Route::resource('foods', 'API\FoodAPIController');
+            Route::post('foods/{id}/activate', 'API\FoodAPIController@activate');
             Route::post('uploads/store', 'API\UploadAPIController@store');
         });
     });
