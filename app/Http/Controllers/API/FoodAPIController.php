@@ -174,7 +174,12 @@ class FoodAPIController extends Controller
         if (!empty($extras)) {
             foreach ($extras as $extra) {
                 $extra['food_id'] = $food->id;
-                $this->extraRepository->create($extra);
+                $newExtra = $this->extraRepository->create($extra);
+                if (isset($extra['image']) && $extra['image']) {
+                    $cacheUpload = $this->uploadRepository->getByUuid($extra['image']);
+                    $mediaItem = $cacheUpload->getMedia('image')->first();
+                    $mediaItem->copy($newExtra, 'image');
+                }
             }
         }
 

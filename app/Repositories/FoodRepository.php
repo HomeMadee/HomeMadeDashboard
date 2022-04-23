@@ -35,7 +35,8 @@ class FoodRepository extends BaseRepository implements CacheableInterface
         'unit',
         'featured',
         'restaurant_id',
-        'category_id'
+        'category_id',
+        'extras'
     ];
 
     /**
@@ -59,7 +60,7 @@ class FoodRepository extends BaseRepository implements CacheableInterface
     {
         $foods = [];
         foreach ($this->all() as $model) {
-            if(!empty($model->restaurant)){
+            if (!empty($model->restaurant)) {
                 $foods[$model->restaurant->name][$model->id] = $model->name;
             }
         }
