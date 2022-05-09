@@ -1,4 +1,5 @@
 <?php
+
 /**
  * File name: RestaurantController.php
  * Last modified: 2020.04.30 at 08:21:08
@@ -118,7 +119,7 @@ class RestaurantController extends Controller
     public function store(CreateRestaurantRequest $request)
     {
         $input = $request->all();
-        if (auth()->user()->hasRole(['manager','client'])) {
+        if (auth()->user()->hasRole(['manager', 'client'])) {
             $input['users'] = [auth()->id()];
         }
         $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->restaurantRepository->model());
@@ -179,10 +180,10 @@ class RestaurantController extends Controller
             Flash::error(__('lang.not_found', ['operator' => __('lang.restaurant')]));
             return redirect(route('restaurants.index'));
         }
-        if($restaurant['active'] == 0){
+        if ($restaurant['active'] == 0) {
             $user = $this->userRepository->getByCriteria(new ManagersClientsCriteria())->pluck('name', 'id');
         } else {
-        $user = $this->userRepository->getByCriteria(new ManagersCriteria())->pluck('name', 'id');
+            $user = $this->userRepository->getByCriteria(new ManagersCriteria())->pluck('name', 'id');
         }
         $drivers = $this->userRepository->getByCriteria(new DriversCriteria())->pluck('name', 'id');
         $cuisine = $this->cuisineRepository->pluck('name', 'id');

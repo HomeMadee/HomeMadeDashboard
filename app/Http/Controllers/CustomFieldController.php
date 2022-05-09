@@ -24,7 +24,6 @@ class CustomFieldController extends Controller
     {
         parent::__construct();
         $this->customFieldRepository = $customFieldRepo;
-
     }
 
     /**
@@ -45,7 +44,7 @@ class CustomFieldController extends Controller
      */
     public function create()
     {
-        foreach (config('app_generator.fields') as $type){
+        foreach (config('app_generator.fields') as $type) {
             $customFieldsTypes[$type] = trans('lang.' . $type);
         }
 
@@ -119,7 +118,7 @@ class CustomFieldController extends Controller
             return redirect(route('customFields.index'));
         }
 
-        foreach (config('app_generator.fields') as $type){
+        foreach (config('app_generator.fields') as $type) {
             $customFieldsTypes[$type] = trans('lang.' . $type);
         }
 
@@ -148,11 +147,31 @@ class CustomFieldController extends Controller
         }
 
         $input = $request->all();
+        $fields = setting('custom_field_models', []);
         try {
             if (!isset($input['values'])) {
                 $input['values'] = null;
             }
+            // dd();
+            $fields =  array_map(function ($v) use ($customField, $input) {
+                return $v == $customField->custom_field_model ?
+                    $input['custom_field_model'] : $v;
+                // return $v;
+            }, $fields);
+            // dd();
+            setting()->set('custom_field_models', array_map(function ($v) use ($customField, $input) {
+                return $v == $customField->custom_field_model ?
+                    $input['custom_field_model'] : $v;
+                // return $v;
+            }, $fields));
+            setting(['custom_field_models', array_map(function ($v) use ($customField, $input) {
+                return $v == $customField->custom_field_model ?
+                    $input['custom_field_model'] : $v;
+                // return $v;
+            }, $fields)])->save();
             $customField = $this->customFieldRepository->update($input, $id);
+
+            // array_push($fields, $input['custom_field_model']);
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());
         }

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 return [
     'actions' => 'Actions',
@@ -24,7 +24,7 @@ return [
     'app_setting_app_version' => 'Application Version',
     'app_setting_app_version_help' => 'Insert the application version',
     'app_setting_app_version_placeholder' => '1.9.3',
-	'app_setting_ar' => 'Arabic/العربية',
+    'app_setting_ar' => 'Arabic/العربية',
     'app_setting_blocked_ips' => 'Blocked IPs',
     'app_setting_blocked_ips_help' => 'Insert ip address to deny access',
     'app_setting_blue' => 'Blue',
@@ -1156,7 +1156,7 @@ return [
     'app_setting_mobile_popular' => 'Popular restaurants grid',
     'app_setting_mobile_recent_reviews_heading' => 'Recent reviews heading',
     'app_setting_mobile_recent_reviews' => 'Recent reviews list',
-	'availability_hour' => 'Availability Hour',
+    'availability_hour' => 'Availability Hour',
     'availability_hour_plural' => 'Availability Hours',
     'availability_hour_desc' => 'Availability Hours Management',
     'availability_hour_edit' => 'Edit Availability Hour',
@@ -1178,28 +1178,28 @@ return [
     'availability_hour_e_provider_id_help' => 'Select Provider',
     'availability_hour_e_provider_id_placeholder' => 'Select Provider',
     // Working days
-    'food_working_days' => 'Working Days',
-    'food_working_days_help' => 'Insert Working Days',
+    'restaurant_working_days' => 'Working Days',
+    'restaurant_working_days_help' => 'Insert Working Days',
     // Working hours
-    'food_working_hours' => 'Working hours',
-    'food_working_hours_help' => 'Insert Working Hours',
-    'food_working_hours_placeholder' => 'Insert Working Hours',
+    'restaurant_working_hours' => 'Working hours',
+    'restaurant_working_hours_help' => 'Insert Working Hours',
+    'restaurant_working_hours_placeholder' => 'Insert Working Hours',
+    // Max Orders
+    'restaurant_max_orders' => 'Restaurant Max Orders',
+    'restaurant_max_orders_help' => 'Insert Restaurant Max Orders',
+    'restaurant_max_orders_placeholder' => 'Insert Restaurant Max Orders',
+    // Min Orders
+    'restaurant_min_orders' => 'Restaurant Min Orders',
+    'restaurant_min_orders_help' => 'Insert Restaurant Min Orders',
+    'restaurant_min_orders_placeholder' => 'Insert Restaurant Min Orders',
+    // daily Orders
+    'restaurant_daily_orders' => 'Restaurant Daily Orders',
+    'restaurant_daily_orders_help' => 'Insert Restaurant Daily Orders',
+    'restaurant_daily_orders_placeholder' => 'Insert Restaurant Daily Orders',
+    // daily Orders
+    'food_producible' => 'Producible Food',
     // Food Prepare Time
     'food_prepare_time' => 'Food Prepare Time',
     'food_prepare_time_help' => 'Insert Food Prepare Time',
     'food_prepare_time_placeholder' => 'Insert Food Prepare Time',
-    // Max Orders
-    'food_max_orders' => 'Food Max Orders',
-    'food_max_orders_help' => 'Insert Food Max Orders',
-    'food_max_orders_placeholder' => 'Insert Food Max Orders',
-    // Min Orders
-    'food_min_orders' => 'Food Min Orders',
-    'food_min_orders_help' => 'Insert Food Min Orders',
-    'food_min_orders_placeholder' => 'Insert Food Min Orders',
-    // daily Orders
-    'food_daily_orders' => 'Food Daily Orders',
-    'food_daily_orders_help' => 'Insert Food Daily Orders',
-    'food_daily_orders_placeholder' => 'Insert Food Daily Orders',
-    // daily Orders
-    'food_producible' => 'Producible Food',
 ];
