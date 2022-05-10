@@ -238,4 +238,22 @@ class RestaurantAPIController extends Controller
 
         return $this->sendResponse($restaurant, __('lang.deleted_successfully', ['operator' => __('lang.restaurant')]));
     }
+
+
+    public function activate($id, Request $request)
+    {
+        $input = $request->all();
+        try {
+            $restaurant = $this->restaurantRepository->findWithoutFail($id);
+            if (empty($restaurant)) {
+                return $this->sendError('Restaurant not found');
+            }
+            $active = $input['active'];
+
+            $restaurant = $this->restaurantRepository->update(['active' => $active], $id);
+            return $this->sendResponse($restaurant, __('lang.deleted_successfully', ['operator' => __('lang.food')]));
+        } catch (\Throwable $th) {
+            return $this->sendError('Error happend', 500);
+        }
+    }
 }

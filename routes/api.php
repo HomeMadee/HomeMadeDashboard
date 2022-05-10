@@ -104,6 +104,7 @@ Route::middleware('auth:api')->group(function () {
             Route::resource('faqs', 'API\FaqAPIController');
             Route::resource('foods', 'API\FoodAPIController');
             Route::post('foods/{id}/activate', 'API\FoodAPIController@activate');
+            Route::post('restaurants/{id}/activate', 'API\RestaurantAPIController@activate');
             Route::post('uploads/store', 'API\UploadAPIController@store');
         });
     });
