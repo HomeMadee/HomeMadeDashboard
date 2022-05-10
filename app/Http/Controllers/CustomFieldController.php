@@ -158,17 +158,10 @@ class CustomFieldController extends Controller
                     $input['custom_field_model'] : $v;
                 // return $v;
             }, $fields);
-            // dd();
-            setting()->set('custom_field_models', array_map(function ($v) use ($customField, $input) {
-                return $v == $customField->custom_field_model ?
-                    $input['custom_field_model'] : $v;
-                // return $v;
-            }, $fields));
-            setting(['custom_field_models', array_map(function ($v) use ($customField, $input) {
-                return $v == $customField->custom_field_model ?
-                    $input['custom_field_model'] : $v;
-                // return $v;
-            }, $fields)])->save();
+
+            array_push($fields, $input['custom_field_model']);
+            setting()->set('custom_field_models', $fields);
+            setting(['custom_field_models', $fields])->save();
             $customField = $this->customFieldRepository->update($input, $id);
 
             // array_push($fields, $input['custom_field_model']);

@@ -1184,18 +1184,22 @@ return [
     'restaurant_working_hours' => 'Working hours',
     'restaurant_working_hours_help' => 'Insert Working Hours',
     'restaurant_working_hours_placeholder' => 'Insert Working Hours',
+    // Max Days
+    'restaurant_max_days' => 'Max Days',
+    'restaurant_max_days_help' => 'Insert Max Days (eg. Order in 30 days)',
+    'restaurant_max_days_placeholder' => 'Insert Max Days',
     // Max Orders
-    'restaurant_max_orders' => 'Restaurant Max Orders',
-    'restaurant_max_orders_help' => 'Insert Restaurant Max Orders',
-    'restaurant_max_orders_placeholder' => 'Insert Restaurant Max Orders',
+    'food_max_orders' => 'Food Max Orders',
+    'food_max_orders_help' => 'Insert Food Max Orders',
+    'food_max_orders_placeholder' => 'Insert Food Max Orders',
     // Min Orders
-    'restaurant_min_orders' => 'Restaurant Min Orders',
-    'restaurant_min_orders_help' => 'Insert Restaurant Min Orders',
-    'restaurant_min_orders_placeholder' => 'Insert Restaurant Min Orders',
+    'food_min_orders' => 'Food Min Orders',
+    'food_min_orders_help' => 'Insert Food Min Orders',
+    'food_min_orders_placeholder' => 'Insert Food Min Orders',
     // daily Orders
-    'restaurant_daily_orders' => 'Restaurant Daily Orders',
-    'restaurant_daily_orders_help' => 'Insert Restaurant Daily Orders',
-    'restaurant_daily_orders_placeholder' => 'Insert Restaurant Daily Orders',
+    'food_daily_orders' => 'Food Daily Orders',
+    'food_daily_orders_help' => 'Insert Food Daily Orders',
+    'food_daily_orders_placeholder' => 'Insert Food Daily Orders',
     // daily Orders
     'food_producible' => 'Producible Food',
     // Food Prepare Time
