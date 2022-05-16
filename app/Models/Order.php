@@ -1,4 +1,5 @@
 <?php
+
 /**
  * File name: Order.php
  * Last modified: 2020.06.11 at 16:10:52
@@ -33,7 +34,7 @@ class Order extends Model
 {
 
     public $table = 'orders';
-    
+
 
 
     public $fillable = [
@@ -45,7 +46,8 @@ class Order extends Model
         'delivery_address_id',
         'delivery_fee',
         'active',
-        'driver_id'
+        'driver_id',
+        'order_date',
     ];
 
     /**
@@ -61,9 +63,10 @@ class Order extends Model
         'status' => 'string',
         'payment_id' => 'integer',
         'delivery_address_id' => 'integer',
-        'delivery_fee'=>'double',
-        'active'=>'boolean',
+        'delivery_fee' => 'double',
+        'active' => 'boolean',
         'driver_id' => 'integer',
+        'order_date' => 'string',
     ];
 
     /**
@@ -85,7 +88,6 @@ class Order extends Model
      */
     protected $appends = [
         'custom_fields',
-        
     ];
 
     public function customFieldsValues()
@@ -95,16 +97,16 @@ class Order extends Model
 
     public function getCustomFieldsAttribute()
     {
-        $hasCustomField = in_array(static::class,setting('custom_field_models',[]));
-        if (!$hasCustomField){
+        $hasCustomField = in_array(static::class, setting('custom_field_models', []));
+        if (!$hasCustomField) {
             return [];
         }
         $array = $this->customFieldsValues()
-            ->join('custom_fields','custom_fields.id','=','custom_field_values.custom_field_id')
-            ->where('custom_fields.in_table','=',true)
+            ->join('custom_fields', 'custom_fields.id', '=', 'custom_field_values.custom_field_id')
+            ->where('custom_fields.in_table', '=', true)
             ->get()->toArray();
 
-        return convertToAssoc($array,'name');
+        return convertToAssoc($array, 'name');
     }
 
     /**
@@ -162,5 +164,4 @@ class Order extends Model
     {
         return $this->belongsTo(\App\Models\DeliveryAddress::class, 'delivery_address_id', 'id');
     }
-    
 }

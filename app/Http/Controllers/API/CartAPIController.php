@@ -10,6 +10,7 @@ use App\Repositories\CartRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Repositories\FoodRepository;
+use App\Repositories\OrderDateRepository;
 use Illuminate\Support\Facades\Log;
 use InfyOm\Generator\Criteria\LimitOffsetCriteria;
 use Prettus\Repository\Criteria\RequestCriteria;
@@ -31,10 +32,17 @@ class CartAPIController extends Controller
     /** @var  FoodRepository */
     private $foodRepository;
 
-    public function __construct(CartRepository $cartRepo, FoodRepository $foodRepo)
-    {
+    /** @var  OrderDateRepository */
+    private $orderDateRepository;
+
+    public function __construct(
+        CartRepository $cartRepo,
+        FoodRepository $foodRepo,
+        OrderDateRepository $orderDateRepo
+    ) {
         $this->cartRepository = $cartRepo;
         $this->foodRepository = $foodRepo;
+        $this->orderDateRepository = $orderDateRepo;
     }
 
     /**
@@ -108,6 +116,7 @@ class CartAPIController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
+        // dd($input);
         try {
             if (isset($input['reset']) && $input['reset'] == '1') {
                 // delete all items in the cart of current user
@@ -166,5 +175,17 @@ class CartAPIController extends Controller
         $cart = $this->cartRepository->delete($id);
 
         return $this->sendResponse($cart, __('lang.deleted_successfully', ['operator' => __('lang.cart')]));
+    }
+
+    public function checkFood($restaurantId, Request $request)
+    {
+        $input = $request->all();
+        $orderDate = $this->orderDateRepository->findWhere(
+            [
+                'restaurant_id' => $restaurantId,
+                'order_date' => $input['order_date']
+            ]
+        );
+        dd($orderDate[0]->order->qty);
     }
 }

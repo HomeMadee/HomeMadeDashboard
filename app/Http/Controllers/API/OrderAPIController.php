@@ -22,6 +22,7 @@ use App\Repositories\CartRepository;
 use App\Repositories\FoodOrderRepository;
 use App\Repositories\FoodRepository;
 use App\Repositories\NotificationRepository;
+use App\Repositories\OrderDateRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\PaymentRepository;
 use App\Repositories\UserRepository;
@@ -54,6 +55,8 @@ class OrderAPIController extends Controller
     private $paymentRepository;
     /** @var  NotificationRepository */
     private $notificationRepository;
+    /** @var  OrderDateRepository */
+    private $orderDateRepository;
 
     /**
      * OrderAPIController constructor.
@@ -63,6 +66,7 @@ class OrderAPIController extends Controller
      * @param PaymentRepository $paymentRepo
      * @param NotificationRepository $notificationRepo
      * @param UserRepository $userRepository
+     * @param OrderDateRepository $orderDateRepository
      */
     public function __construct(
         OrderRepository $orderRepo,
@@ -71,7 +75,8 @@ class OrderAPIController extends Controller
         PaymentRepository $paymentRepo,
         NotificationRepository $notificationRepo,
         UserRepository $userRepository,
-        FoodRepository $foodRepo
+        FoodRepository $foodRepo,
+        OrderDateRepository $orderDateRpo
     ) {
         $this->orderRepository = $orderRepo;
         $this->foodOrderRepository = $foodOrderRepository;
@@ -80,6 +85,7 @@ class OrderAPIController extends Controller
         $this->paymentRepository = $paymentRepo;
         $this->notificationRepository = $notificationRepo;
         $this->foodRepository = $foodRepo;
+        $this->orderDateRepository = $orderDateRpo;
     }
 
     /**
@@ -201,6 +207,15 @@ class OrderAPIController extends Controller
                 $this->orderRepository->update(['payment_id' => $payment->id], $order->id);
 
                 $this->cartRepository->deleteWhere(['user_id' => $order->user_id]);
+                $food =  $this->foodRepository->findWithoutFail($input['foods'][0]['food_id']);
+                $this->orderDateRepository->create(
+                    [
+                        'order_id' => $order->id,
+                        'order_date' => $input['order_date'],
+                        'restaurant_id' => $food->restaurant_id
+                    ]
+                );
+
 
                 Notification::send($order->foodOrders[0]->food->restaurant->users, new NewOrder($order));
             }
@@ -252,6 +267,18 @@ class OrderAPIController extends Controller
             $this->orderRepository->update(['payment_id' => $payment->id], $order->id);
 
             $this->cartRepository->deleteWhere(['user_id' => $order->user_id]);
+
+
+            $this->cartRepository->deleteWhere(['user_id' => $order->user_id]);
+            $food =  $this->foodRepository->findWithoutFail($input['foods'][0]['food_id']);
+            $this->orderDateRepository->create(
+                [
+                    'order_id' => $order->id,
+                    'order_date' => $input['order_date'],
+                    'restaurant_id' => $food->restaurant_id
+                ]
+            );
+
 
             Notification::send($order->foodOrders[0]->food->restaurant->users, new NewOrder($order));
         } catch (ValidatorException $e) {

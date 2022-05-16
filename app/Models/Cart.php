@@ -1,4 +1,5 @@
 <?php
+
 /**
  * File name: Cart.php
  * Last modified: 2020.06.11 at 16:10:52
@@ -26,12 +27,13 @@ class Cart extends Model
 {
 
     public $table = 'carts';
-    
+
 
 
     public $fillable = [
         'food_id',
         'user_id',
+        'order_date',
         'quantity'
     ];
 
@@ -43,6 +45,7 @@ class Cart extends Model
     protected $casts = [
         'food_id' => 'integer',
         'user_id' => 'integer',
+        'order_date' => 'string',
         'quantity' => 'integer'
     ];
 
@@ -72,16 +75,16 @@ class Cart extends Model
 
     public function getCustomFieldsAttribute()
     {
-        $hasCustomField = in_array(static::class,setting('custom_field_models',[]));
-        if (!$hasCustomField){
+        $hasCustomField = in_array(static::class, setting('custom_field_models', []));
+        if (!$hasCustomField) {
             return [];
         }
         $array = $this->customFieldsValues()
-            ->join('custom_fields','custom_fields.id','=','custom_field_values.custom_field_id')
-            ->where('custom_fields.in_table','=',true)
+            ->join('custom_fields', 'custom_fields.id', '=', 'custom_field_values.custom_field_id')
+            ->where('custom_fields.in_table', '=', true)
             ->get()->toArray();
 
-        return convertToAssoc($array,'name');
+        return convertToAssoc($array, 'name');
     }
 
     /**

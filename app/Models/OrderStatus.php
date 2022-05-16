@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Eloquent as Model;
+use Illuminate\Database\Eloquent\Model as EloquentModel;
 
 /**
  * Class OrderStatus
@@ -11,7 +12,7 @@ use Eloquent as Model;
  *
  * @property string status
  */
-class OrderStatus extends Model
+class OrderStatus extends EloquentModel
 {
 
     public $table = 'order_statuses';

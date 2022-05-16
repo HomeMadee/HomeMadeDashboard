@@ -37,7 +37,7 @@ class FoodOrderAPIController extends Controller
      */
     public function index(Request $request)
     {
-        try{
+        try {
             $this->foodOrderRepository->pushCriteria(new RequestCriteria($request));
             $this->foodOrderRepository->pushCriteria(new LimitOffsetCriteria($request));
         } catch (RepositoryException $e) {
