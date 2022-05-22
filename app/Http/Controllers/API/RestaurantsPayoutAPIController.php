@@ -37,7 +37,7 @@ class RestaurantsPayoutAPIController extends Controller
      */
     public function index(Request $request)
     {
-        try{
+        try {
             $this->restaurantsPayoutRepository->pushCriteria(new RequestCriteria($request));
             $this->restaurantsPayoutRepository->pushCriteria(new LimitOffsetCriteria($request));
         } catch (RepositoryException $e) {

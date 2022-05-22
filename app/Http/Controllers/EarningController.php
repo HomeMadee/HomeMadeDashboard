@@ -26,15 +26,15 @@ class EarningController extends Controller
     private $customFieldRepository;
 
     /**
-  * @var RestaurantRepository
-  */
-private $restaurantRepository;
+     * @var RestaurantRepository
+     */
+    private $restaurantRepository;
     /**
      * @var OrderRepository
      */
     private $orderRepository;
 
-    public function __construct(EarningRepository $earningRepo, CustomFieldRepository $customFieldRepo , RestaurantRepository $restaurantRepo, OrderRepository $orderRepository)
+    public function __construct(EarningRepository $earningRepo, CustomFieldRepository $customFieldRepo, RestaurantRepository $restaurantRepo, OrderRepository $orderRepository)
     {
         parent::__construct();
         $this->earningRepository = $earningRepo;
@@ -63,9 +63,9 @@ private $restaurantRepository;
     {
 
         $restaurants = $this->restaurantRepository->all();
-        foreach ($restaurants as $restaurant){
+        foreach ($restaurants as $restaurant) {
             $restaurantId = $restaurant->id;
-            $this->earningRepository->firstOrCreate(['restaurant_id'=>$restaurantId])->first();
+            $this->earningRepository->firstOrCreate(['restaurant_id' => $restaurantId])->first();
         }
         return redirect(route('earnings.index'));
     }
@@ -83,13 +83,12 @@ private $restaurantRepository;
         $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->earningRepository->model());
         try {
             $earning = $this->earningRepository->create($input);
-            $earning->customFieldsValues()->createMany(getCustomFieldsValues($customFields,$request));
-            
+            $earning->customFieldsValues()->createMany(getCustomFieldsValues($customFields, $request));
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());
         }
 
-        Flash::success(__('lang.saved_successfully',['operator' => __('lang.earning')]));
+        Flash::success(__('lang.saved_successfully', ['operator' => __('lang.earning')]));
 
         return redirect(route('earnings.index'));
     }
@@ -124,22 +123,22 @@ private $restaurantRepository;
     public function edit($id)
     {
         $earning = $this->earningRepository->findWithoutFail($id);
-        $restaurant = $this->restaurantRepository->pluck('name','id');
-        
+        $restaurant = $this->restaurantRepository->pluck('name', 'id');
+
 
         if (empty($earning)) {
-            Flash::error(__('lang.not_found',['operator' => __('lang.earning')]));
+            Flash::error(__('lang.not_found', ['operator' => __('lang.earning')]));
 
             return redirect(route('earnings.index'));
         }
         $customFieldsValues = $earning->customFieldsValues()->with('customField')->get();
         $customFields =  $this->customFieldRepository->findByField('custom_field_model', $this->earningRepository->model());
-        $hasCustomField = in_array($this->earningRepository->model(),setting('custom_field_models',[]));
-        if($hasCustomField) {
+        $hasCustomField = in_array($this->earningRepository->model(), setting('custom_field_models', []));
+        if ($hasCustomField) {
             $html = generateCustomField($customFields, $customFieldsValues);
         }
 
-        return view('earnings.edit')->with('earning', $earning)->with("customFields", isset($html) ? $html : false)->with("restaurant",$restaurant);
+        return view('earnings.edit')->with('earning', $earning)->with("customFields", isset($html) ? $html : false)->with("restaurant", $restaurant);
     }
 
     /**
@@ -162,17 +161,17 @@ private $restaurantRepository;
         $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->earningRepository->model());
         try {
             $earning = $this->earningRepository->update($input, $id);
-            
-            
-            foreach (getCustomFieldsValues($customFields, $request) as $value){
+
+
+            foreach (getCustomFieldsValues($customFields, $request) as $value) {
                 $earning->customFieldsValues()
-                    ->updateOrCreate(['custom_field_id'=>$value['custom_field_id']],$value);
+                    ->updateOrCreate(['custom_field_id' => $value['custom_field_id']], $value);
             }
         } catch (ValidatorException $e) {
             Flash::error($e->getMessage());
         }
 
-        Flash::success(__('lang.updated_successfully',['operator' => __('lang.earning')]));
+        Flash::success(__('lang.updated_successfully', ['operator' => __('lang.earning')]));
 
         return redirect(route('earnings.index'));
     }
@@ -196,12 +195,12 @@ private $restaurantRepository;
 
         $this->earningRepository->delete($id);
 
-        Flash::success(__('lang.deleted_successfully',['operator' => __('lang.earning')]));
+        Flash::success(__('lang.deleted_successfully', ['operator' => __('lang.earning')]));
 
         return redirect(route('earnings.index'));
     }
 
-        /**
+    /**
      * Remove Media of Earning
      * @param Request $request
      */
@@ -210,7 +209,7 @@ private $restaurantRepository;
         $input = $request->all();
         $earning = $this->earningRepository->findWithoutFail($input['id']);
         try {
-            if($earning->hasMedia($input['collection'])){
+            if ($earning->hasMedia($input['collection'])) {
                 $earning->getFirstMedia($input['collection'])->delete();
             }
         } catch (\Exception $e) {

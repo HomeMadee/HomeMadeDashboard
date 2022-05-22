@@ -28,26 +28,26 @@ class EarningDataTable extends DataTable
         $columns = array_column($this->getColumns(), 'data');
         $dataTable = $dataTable
             ->editColumn('restaurant.name', function ($earning) {
-                return getLinksColumnByRouteName([$earning->restaurant], "restaurants.edit",'id','name');
+                return getLinksColumnByRouteName([$earning->restaurant], "restaurants.edit", 'id', 'name');
             })
 
             ->editColumn('updated_at', function ($earning) {
                 return getDateColumn($earning, 'updated_at');
             })
             ->editColumn('total_earning', function ($earning) {
-                return getPriceColumn($earning,'total_earning');
+                return getPriceColumn($earning, 'total_earning');
             })
             ->editColumn('admin_earning', function ($earning) {
-                return getPriceColumn($earning,'admin_earning');
+                return getPriceColumn($earning, 'admin_earning');
             })
             ->editColumn('restaurant_earning', function ($earning) {
-                return getPriceColumn($earning,'restaurant_earning');
+                return getPriceColumn($earning, 'restaurant_earning');
             })
             ->editColumn('delivery_fee', function ($earning) {
-                return getPriceColumn($earning,'delivery_fee');
+                return getPriceColumn($earning, 'delivery_fee');
             })
             ->editColumn('tax', function ($earning) {
-                return getPriceColumn($earning,'tax');
+                return getPriceColumn($earning, 'tax');
             })
             ->addColumn('action', 'earnings.datatables_actions')
             ->rawColumns(array_merge($columns, ['action']));
@@ -130,7 +130,7 @@ class EarningDataTable extends DataTable
     {
         if (auth()->user()->hasRole('admin')) {
             return $model->newQuery()->with("restaurant")->select('earnings.*');
-        }else if((auth()->user()->hasRole('manager'))){
+        } else if ((auth()->user()->hasRole('manager'))) {
             return $model->newQuery()->with("restaurant")
                 ->join("user_restaurants", "user_restaurants.restaurant_id", "=", "earnings.restaurant_id")
                 ->where('user_restaurants.user_id', auth()->id())->select('earnings.*');
@@ -147,12 +147,16 @@ class EarningDataTable extends DataTable
         return $this->builder()
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->addAction(['title'=>trans('lang.actions'),'width' => '80px', 'printable' => false, 'responsivePriority' => '100'])
+            ->addAction(['title' => trans('lang.actions'), 'width' => '80px', 'printable' => false, 'responsivePriority' => '100'])
             ->parameters(array_merge(
-                config('datatables-buttons.parameters'), [
+                config('datatables-buttons.parameters'),
+                [
                     'language' => json_decode(
-                        file_get_contents(base_path('resources/lang/' . app()->getLocale() . '/datatable.json')
-                        ), true)
+                        file_get_contents(
+                            base_path('resources/lang/' . app()->getLocale() . '/datatable.json')
+                        ),
+                        true
+                    )
                 ]
             ));
     }

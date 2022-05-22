@@ -1,4 +1,5 @@
 <?php
+
 /**
  * File name: RestaurantsPayout.php
  * Last modified: 2020.04.30 at 08:21:09
@@ -27,7 +28,7 @@ class RestaurantsPayout extends Model
 {
 
     public $table = 'restaurants_payouts';
-    
+
 
 
     public $fillable = [
@@ -70,7 +71,7 @@ class RestaurantsPayout extends Model
      */
     protected $appends = [
         'custom_fields',
-        
+
     ];
 
     public function customFieldsValues()
@@ -80,16 +81,16 @@ class RestaurantsPayout extends Model
 
     public function getCustomFieldsAttribute()
     {
-        $hasCustomField = in_array(static::class,setting('custom_field_models',[]));
-        if (!$hasCustomField){
+        $hasCustomField = in_array(static::class, setting('custom_field_models', []));
+        if (!$hasCustomField) {
             return [];
         }
         $array = $this->customFieldsValues()
-            ->join('custom_fields','custom_fields.id','=','custom_field_values.custom_field_id')
-            ->where('custom_fields.in_table','=',true)
+            ->join('custom_fields', 'custom_fields.id', '=', 'custom_field_values.custom_field_id')
+            ->where('custom_fields.in_table', '=', true)
             ->get()->toArray();
 
-        return convertToAssoc($array,'name');
+        return convertToAssoc($array, 'name');
     }
 
     /**
@@ -99,5 +100,4 @@ class RestaurantsPayout extends Model
     {
         return $this->belongsTo(\App\Models\Restaurant::class, 'restaurant_id', 'id');
     }
-    
 }

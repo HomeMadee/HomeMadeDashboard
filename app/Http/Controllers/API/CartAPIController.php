@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Repositories\FoodRepository;
 use App\Repositories\OrderDateRepository;
+use App\Repositories\OrderRepository;
 use Illuminate\Support\Facades\Log;
 use InfyOm\Generator\Criteria\LimitOffsetCriteria;
 use Prettus\Repository\Criteria\RequestCriteria;
@@ -35,14 +36,20 @@ class CartAPIController extends Controller
     /** @var  OrderDateRepository */
     private $orderDateRepository;
 
+
+    /** @var  OrderRepository */
+    private $orderRepository;
+
     public function __construct(
         CartRepository $cartRepo,
         FoodRepository $foodRepo,
-        OrderDateRepository $orderDateRepo
+        OrderDateRepository $orderDateRepo,
+        OrderRepository $orderRepo
     ) {
         $this->cartRepository = $cartRepo;
         $this->foodRepository = $foodRepo;
         $this->orderDateRepository = $orderDateRepo;
+        $this->orderRepository = $orderRepo;
     }
 
     /**
@@ -180,12 +187,44 @@ class CartAPIController extends Controller
     public function checkFood($restaurantId, Request $request)
     {
         $input = $request->all();
+        $this->orderDateRepository->pushCriteria(new RequestCriteria($request));
         $orderDate = $this->orderDateRepository->findWhere(
             [
                 'restaurant_id' => $restaurantId,
                 'order_date' => $input['order_date']
             ]
         );
-        dd($orderDate[0]->order->qty);
+        $orders = $orderDate->toArray();
+        if (empty($orders)) {
+            return $this->sendResponse(true, 'This date the restaurant will be free');
+        }
+
+        $remaining = 0;
+
+        $avaialbe = TRUE;
+
+        foreach ($orders as $order) {
+            $foodOrders = $order['order']['food_orders'];
+            $restaurant = $order['restaurant'];
+            $workingHours = intval($restaurant['custom_fields']['working_hours']['value']);
+            // dd(($foodOrders));
+            foreach ($foodOrders as $food) {
+                if ($food['food']['custom_fields']['producible'] === '0') {
+                    $remaining = intval($food['food']['custom_fields']['daily_orders']);
+                } else {
+                    $dailyProducts =  $workingHours / intval($food['food']['custom_fields']['prepare_time']['value']);
+                    $remaining = $dailyProducts;
+                    // dd($food['food']['custom_fields']['prepare_time']['value']);
+                }
+                // $food['quantity']
+
+                /*  $prepareTime = intval($food['food']['custom_fields']['prepare_time']);
+                if(intval($food['food']['custom_fields']['producible'])) {
+
+                }
+                $qty = $food['quantity'];
+                dd($food); */
+            }
+        }
     }
 }
