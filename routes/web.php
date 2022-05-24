@@ -104,7 +104,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('orderStatuses', 'OrderStatusController')->except([
         'create', 'store', 'destroy'
-    ]);;
+    ]);
 
     Route::post('foods/remove-media', 'FoodController@removeMedia');
     Route::resource('foods', 'FoodController')->except([
