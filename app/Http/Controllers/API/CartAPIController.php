@@ -235,11 +235,12 @@ class CartAPIController extends Controller
                 foreach ($order['order']['food_orders'] as $foodOrder) {
                     if ($foodOrder['food']['custom_fields']['producible']['value'] === '1') {
                         $hrsInDay += intval($foodOrder['food']['custom_fields']['prepare_time']['value']) * $foodOrder['quantity'];
-                        Log::debug('we found food ' . $foodOrder['food_id'] . ' with qty ' . $foodOrder['quantity'] . ' and it takes ' . $hrsInDay);
                     }
                 }
             }
             $requiredTime = intval($food->customFields['prepare_time']['value']) * $input['quantity'];
+            $remainingHrs = $totalHrs - $hrsInDay;
+            Log::debug('Remaining: ' . $remainingHrs);
             if ($totalHrs >= ($hrsInDay + $requiredTime)) {
                 return $this->sendResponse(true, 'This date the restaurant will be free');
             } else {
