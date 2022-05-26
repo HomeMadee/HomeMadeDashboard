@@ -152,13 +152,13 @@ class FoodAPIController extends Controller
         $input = $request->all();
         $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->foodRepository->model());
         try {
-            if ($input['producible'] === '0') {
-                $input['remaining'] = $input['daily_orders'];
-            } else {
-                // $hrsPerDay = $input['working_hours'] / count($input['working_days']);
-                $dailyProducts =  $input['working_hours'] / $input['prepare_time'];
-                $input['remaining'] = $dailyProducts;
-            }
+            // if ($input['producible'] === '0') {
+            //     $input['remaining'] = $input['daily_orders'];
+            // } else {
+            //     // $hrsPerDay = $input['working_hours'] / count($input['working_days']);
+            //     $dailyProducts =  $input['working_hours'] / $input['prepare_time'];
+            //     $input['remaining'] = $dailyProducts;
+            // }
             $food = $this->foodRepository->create($input);
             $food->customFieldsValues()->createMany(getCustomFieldsValues($customFields, $request));
             if (isset($input['image']) && $input['image']) {

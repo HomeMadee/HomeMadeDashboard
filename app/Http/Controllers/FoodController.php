@@ -110,12 +110,12 @@ class FoodController extends Controller
         $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->foodRepository->model());
         try {
             // dd($customFields->toArray());
-            if ($input['producible'] === '0') {
-                $input['remaining'] = $input['daily_orders'];
-            } else {
-                $dailyProducts = $input['working_hours'] / $input['prepare_time'];
-                $input['remaining'] = $dailyProducts;
-            }
+            // if ($input['producible'] === '0') {
+            //     $input['remaining'] = $input['daily_orders'];
+            // } else {
+            //     $dailyProducts = $input['working_hours'] / $input['prepare_time'];
+            //     $input['remaining'] = $dailyProducts;
+            // }
             $food = $this->foodRepository->create($input);
             $food->customFieldsValues()->createMany(getCustomFieldsValues($customFields, $request));
             if (isset($input['image']) && $input['image']) {
