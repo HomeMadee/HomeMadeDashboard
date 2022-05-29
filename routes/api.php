@@ -119,6 +119,7 @@ Route::middleware('auth:api')->group(function () {
     Route::resource('favorites', 'API\FavoriteAPIController');
 
     Route::resource('orders', 'API\OrderAPIController');
+    Route::get('getOrdersByResaurant', 'API\OrderAPIController@getOrdersByResaurant');
 
     Route::resource('food_orders', 'API\FoodOrderAPIController');
 

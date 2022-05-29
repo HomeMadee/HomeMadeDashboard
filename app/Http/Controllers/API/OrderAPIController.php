@@ -110,6 +110,40 @@ class OrderAPIController extends Controller
         return $this->sendResponse($orders->toArray(), 'Orders retrieved successfully');
     }
 
+
+    /**
+     * Display a listing of the Order.
+     * GET|HEAD /orders
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getOrdersByResaurant(Request $request)
+    {
+        $input = $request->all();
+
+        try {
+            $this->orderRepository->pushCriteria(new RequestCriteria($request));
+            $this->orderRepository->pushCriteria(new LimitOffsetCriteria($request));
+            $this->orderRepository->pushCriteria(new OrdersOfStatusesCriteria($request));
+            $this->orderRepository->pushCriteria(new OrdersOfUserCriteria(auth()->id()));
+        } catch (RepositoryException $e) {
+            return $this->sendError($e->getMessage());
+        }
+
+        $restOrders = array();
+        $orders = $this->orderRepository->all()->toArray();
+        foreach ($orders as $order) {
+            foreach ($order['food_orders'] as $orderFood) {
+                if ($orderFood['food']['restaurant_id'] === intval($input['restaurant_id'])) {
+                    array_push($restOrders, $order);
+                }
+            }
+        }
+
+        return $this->sendResponse($orders, 'Orders retrieved successfully');
+    }
+
     /**
      * Display the specified Order.
      * GET|HEAD /orders/{id}

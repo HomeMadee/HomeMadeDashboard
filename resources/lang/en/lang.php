@@ -1200,6 +1200,15 @@ return [
     'food_daily_orders' => 'Food Daily Orders',
     'food_daily_orders_help' => 'Insert Food Daily Orders',
     'food_daily_orders_placeholder' => 'Insert Food Daily Orders',
+    'food_min_orders_placeholder' => 'Insert Food Min Orders',
+    // Can order on off days
+    'restaurant_order_off_days' => 'Can order on off days?',
+    'restaurant_order_off_days_help' => 'Insert Food Daily Orders',
+    'restaurant_order_off_days_placeholder' => 'Insert Food Daily Orders',
+    // Can order when full capacity
+    'restaurant_order_full_capacity' => 'Can order when full capacity?',
+    'restaurant_order_full_capacity_help' => 'Insert Food Daily Orders',
+    'restaurant_order_full_capacity_placeholder' => 'Insert Food Daily Orders',
     // daily Orders
     'food_producible' => 'Producible Food',
     // Food Prepare Time

@@ -68,7 +68,6 @@ class RestaurantsPayoutController extends Controller
             $this->restaurantRepository->pushCriteria(new RestaurantsOfManagerCriteria(auth()->id()));
         }
         $restaurant = $this->restaurantRepository->pluck('name', 'id');
-
         $hasCustomField = in_array($this->restaurantsPayoutRepository->model(), setting('custom_field_models', []));
         if ($hasCustomField) {
             $customFields = $this->customFieldRepository->findByField('custom_field_model', $this->restaurantsPayoutRepository->model());
